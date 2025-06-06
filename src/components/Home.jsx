@@ -23,9 +23,12 @@ export default function Home() {
           }}
         >
          
-        <iframe
+    <iframe
   className="w-full aspect-video min-h-[320px] bg-black"
-  src="https://clips.twitch.tv/embed?clip=GorgeousUgliestWalrusDxCat-X9VKVCk9Glou0nfV&parent=localhost&parent=elysium.vercel.app"
+  src="https://clips.twitch.tv/embed?clip=GorgeousUgliestWalrusDxCat-X9VKVCk9Glou0nfV
+    &parent=localhost
+    &parent=elysium.vercel.app
+    &parent=elysium-git-main-nelkha.vercel.app"
   title="Clip Twitch"
   allowFullScreen
 ></iframe>
