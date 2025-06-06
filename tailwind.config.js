@@ -6,8 +6,8 @@ export default {
       poppins: ['Poppins', 'sans-serif'],
     },
     colors: {
-      azulFrancia: '#3a9f38',
-      dorado: '#c49b42',
+      azulFrancia: '#0077c8',
+      dorado: '#3a9f38',
     },
   },
 },

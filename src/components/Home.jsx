@@ -17,19 +17,19 @@ export default function Home() {
       </p>
       <div className="flex justify-center mt-8">
         <div
-          className="relative rounded-[2.5rem] border-4 border-azulFrancia p-4 bg-gradient-to-br from-yellow-400 via-azulFrancia to-yellow-500 shadow-2xl w-full max-w-4xl"
+          className="relative rounded-[2.5rem] border-4 border-azulFrancia p-4 bg-gradient-to-br from-green-400 via-azulFrancia to-green-500 shadow-2xl w-full max-w-4xl"
           style={{
-            boxShadow: '0 0 40px 10px #FFD700, 0 0 0 8px #1e3a8a'
+            boxShadow: '0 0 40px 10px #3a9f38, 0 0 0 8px #1e3a8a'
           }}
         >
-          <img
-            src={princ}
-            alt="Elysium principal"
-            className="rounded-[2rem] border-4 border-dorado w-full max-w-3xl mx-auto"
-            style={{
-              boxShadow: '0 0 32px 4px #1e3a8a, 0 0 0 8px #FFD700'
-            }}
-          />
+         
+        <iframe
+  className="w-full aspect-video min-h-[320px] bg-black"
+  src="https://clips.twitch.tv/embed?clip=GorgeousUgliestWalrusDxCat-X9VKVCk9Glou0nfV&parent=localhost&parent=tu-dominio.vercel.app"
+  title="Clip Twitch"
+  allowFullScreen
+></iframe>
+          
         </div>
       </div>
     </motion.div>
