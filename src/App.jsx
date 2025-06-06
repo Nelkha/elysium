@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Clips from './components/Clips';
+import Miembros from './components/Miembros';
 import Recruitment from './components/Recruitment';
 import PageWrapper from './components/PageWrapper';
 
@@ -12,8 +13,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
+      <AnimatePresence mode="wait">        <Routes location={location} key={location.pathname}>
           <Route
             path="/"
             element={
@@ -27,6 +27,14 @@ function App() {
             element={
               <PageWrapper>
                 <Clips />
+              </PageWrapper>
+            }
+          />
+          <Route
+            path="/miembros"
+            element={
+              <PageWrapper>
+                <Miembros />
               </PageWrapper>
             }
           />
