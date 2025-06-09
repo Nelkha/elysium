@@ -4,19 +4,19 @@ import homeleftImg from '../assets/img/homeleft.png';
 
 export default function Home() {
   const imageRef = useRef(null);
-  const videoRef = useRef(null);  useEffect(() => {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
     const adjustVideoHeight = () => {
-      // Solo ajustar en pantallas medianas y grandes donde la imagen es visible
-      if (window.innerWidth >= 768 && imageRef.current && videoRef.current) {
+      const isDesktop = window.innerWidth >= 768;
+      if (imageRef.current && videoRef.current && isDesktop) {
         const imageHeight = imageRef.current.offsetHeight;
         if (imageHeight > 0) {
           videoRef.current.style.height = `${imageHeight}px`;
-          videoRef.current.style.aspectRatio = 'auto';
         }
       }
     };
 
-    // Ajustar altura cuando la imagen se carga
     const img = imageRef.current;
     if (img && window.innerWidth >= 768) {
       if (img.complete) {
@@ -26,18 +26,16 @@ export default function Home() {
       }
     }
 
-    // Ajustar altura cuando cambia el tamaño de la ventana
     window.addEventListener('resize', adjustVideoHeight);
-    
-    // Ejecutar una vez al montar solo en desktop
     if (window.innerWidth >= 768) {
       setTimeout(adjustVideoHeight, 100);
     }
-    
+
     return () => {
       window.removeEventListener('resize', adjustVideoHeight);
     };
   }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -46,7 +44,7 @@ export default function Home() {
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-gradient-to-br from-darkBg via-black to-cardBg flex flex-col items-center relative overflow-hidden px-4 sm:px-6 md:px-8 pt-24"
     >
-      {/* Animated background particles */}
+      {/* Background particles */}
       <div className="absolute inset-0">
         {[...Array(50)].map((_, i) => (
           <div
@@ -62,7 +60,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Grid pattern overlay */}
+      {/* Grid overlay */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div
           className="w-full h-full"
@@ -76,25 +74,27 @@ export default function Home() {
         ></div>
       </div>
 
-      {/* Texto centrado arriba */}
+      {/* Texto principal */}
       <motion.div
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1 }}
         className="max-w-3xl text-center z-20 mb-12 sm:mb-16 relative px-2"
-      >        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 font-poppins leading-tight">
+      >
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 font-poppins leading-tight">
           Bienvenidos a<br />
           <span className="bg-gradient-to-r from-neon via-dorado to-purple bg-clip-text text-transparent animate-glow inline-block px-4 py-2 rounded-2xl border border-neon/20 backdrop-blur-sm bg-black/10">
             Elysium
           </span>
         </h1>
-
         <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed font-poppins mb-8 backdrop-blur-sm bg-white/5 p-4 rounded-2xl border border-white/10 inline-block max-w-xl mx-auto">
           Gremio competitivo, unido por la pasión del juego. Nuestro legado es honor, lealtad y gloria.
         </p>
-      </motion.div>      {/* Contenedores personaje y video */}
+      </motion.div>
+
+      {/* Contenedor imagen + video */}
       <div className="flex flex-col md:flex-row w-full max-w-7xl gap-6 md:gap-10 z-20 px-4 sm:px-0 items-start">
-        {/* Personaje épico: oculto en pantallas pequeñas */}
+        {/* Imagen a la izquierda (oculta en móvil) */}
         <div className="w-full md:w-80 rounded-2xl overflow-hidden relative hidden md:block flex-shrink-0">
           <img
             ref={imageRef}
@@ -104,11 +104,10 @@ export default function Home() {
           />
         </div>
 
-        {/* Video responsive - aspect ratio 16:9 en móvil, altura de imagen en desktop */}
+        {/* Video */}
         <div
           ref={videoRef}
-          className="w-full flex-1 relative rounded-2xl overflow-hidden bg-gradient-to-br from-cardBg to-gray-800 cursor-pointer border border-white/10"
-          style={{ aspectRatio: '16/9' }}
+          className="w-full flex-1 relative rounded-2xl overflow-hidden bg-gradient-to-br from-cardBg to-gray-800 cursor-pointer border border-white/10 aspect-[16/9] md:aspect-auto"
         >
           <iframe
             src="https://www.youtube.com/embed/I_qczEg0W20"
@@ -121,7 +120,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Botones debajo */}
+      {/* Botones */}
       <motion.div
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -135,7 +134,8 @@ export default function Home() {
 
         <button className="group relative border-2 border-neon px-8 py-4 rounded-xl font-bold text-neon transition-all duration-300 hover:bg-neon hover:text-black hover:shadow-2xl hover:shadow-neon/50">
           Ver Más
-        </button>      </motion.div>
+        </button>
+      </motion.div>
     </motion.div>
   );
 }
