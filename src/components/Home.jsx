@@ -1,8 +1,43 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import homeleftImg from '../assets/img/homeleft.png';
 
 export default function Home() {
+  const imageRef = useRef(null);
+  const videoRef = useRef(null);  useEffect(() => {
+    const adjustVideoHeight = () => {
+      // Solo ajustar en pantallas medianas y grandes donde la imagen es visible
+      if (window.innerWidth >= 768 && imageRef.current && videoRef.current) {
+        const imageHeight = imageRef.current.offsetHeight;
+        if (imageHeight > 0) {
+          videoRef.current.style.height = `${imageHeight}px`;
+          videoRef.current.style.aspectRatio = 'auto';
+        }
+      }
+    };
+
+    // Ajustar altura cuando la imagen se carga
+    const img = imageRef.current;
+    if (img && window.innerWidth >= 768) {
+      if (img.complete) {
+        setTimeout(adjustVideoHeight, 100);
+      } else {
+        img.onload = () => setTimeout(adjustVideoHeight, 100);
+      }
+    }
+
+    // Ajustar altura cuando cambia el tamaño de la ventana
+    window.addEventListener('resize', adjustVideoHeight);
+    
+    // Ejecutar una vez al montar solo en desktop
+    if (window.innerWidth >= 768) {
+      setTimeout(adjustVideoHeight, 100);
+    }
+    
+    return () => {
+      window.removeEventListener('resize', adjustVideoHeight);
+    };
+  }, []);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -47,10 +82,9 @@ export default function Home() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1 }}
         className="max-w-3xl text-center z-20 mb-12 sm:mb-16 relative px-2"
-      >
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 font-poppins leading-tight">
+      >        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 font-poppins leading-tight">
           Bienvenidos a<br />
-          <span className="bg-gradient-to-r from-neon via-dorado to-purple bg-clip-text text-transparent animate-glow">
+          <span className="bg-gradient-to-r from-neon via-dorado to-purple bg-clip-text text-transparent animate-glow inline-block px-4 py-2 rounded-2xl border border-neon/20 backdrop-blur-sm bg-black/10">
             Elysium
           </span>
         </h1>
@@ -58,23 +92,23 @@ export default function Home() {
         <p className="text-base sm:text-lg md:text-xl text-gray-300 leading-relaxed font-poppins mb-8 backdrop-blur-sm bg-white/5 p-4 rounded-2xl border border-white/10 inline-block max-w-xl mx-auto">
           Gremio competitivo, unido por la pasión del juego. Nuestro legado es honor, lealtad y gloria.
         </p>
-      </motion.div>
-
-      {/* Contenedores personaje y video */}
-      <div className="flex flex-col md:flex-row w-full max-w-7xl gap-6 md:gap-10 z-20 px-4 sm:px-0">
+      </motion.div>      {/* Contenedores personaje y video */}
+      <div className="flex flex-col md:flex-row w-full max-w-7xl gap-6 md:gap-10 z-20 px-4 sm:px-0 items-start">
         {/* Personaje épico: oculto en pantallas pequeñas */}
         <div className="w-full md:w-80 rounded-2xl overflow-hidden relative hidden md:block flex-shrink-0">
           <img
+            ref={imageRef}
             src={homeleftImg}
             alt="Personaje épico"
             className="w-full h-auto object-contain"
           />
         </div>
 
-        {/* Video responsive con ratio 16:9 */}
+        {/* Video responsive - aspect ratio 16:9 en móvil, altura de imagen en desktop */}
         <div
-          className="flex-1 relative rounded-2xl overflow-hidden bg-gradient-to-br from-cardBg to-gray-800 cursor-pointer border border-white/10"
-          style={{ paddingTop: '56.25%' }} // 16:9 aspect ratio
+          ref={videoRef}
+          className="w-full flex-1 relative rounded-2xl overflow-hidden bg-gradient-to-br from-cardBg to-gray-800 cursor-pointer border border-white/10"
+          style={{ aspectRatio: '16/9' }}
         >
           <iframe
             src="https://www.youtube.com/embed/I_qczEg0W20"
@@ -101,15 +135,7 @@ export default function Home() {
 
         <button className="group relative border-2 border-neon px-8 py-4 rounded-xl font-bold text-neon transition-all duration-300 hover:bg-neon hover:text-black hover:shadow-2xl hover:shadow-neon/50">
           Ver Más
-        </button>
-      </motion.div>
-
-      {/* Floating geometric shapes */}
-      <div className="absolute top-1/4 right-1/4 w-20 h-20 border-2 border-purple/30 rotate-45 animate-float hidden md:block"></div>
-      <div
-        className="absolute bottom-1/4 left-1/4 w-16 h-16 bg-gradient-to-r from-neon/20 to-purple/20 rounded-full animate-float hidden md:block"
-        style={{ animationDelay: '3s' }}
-      ></div>
+        </button>      </motion.div>
     </motion.div>
   );
 }

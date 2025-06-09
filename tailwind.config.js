@@ -26,10 +26,9 @@ export default {
       float: {
         '0%, 100%': { transform: 'translateY(0px)' },
         '50%': { transform: 'translateY(-20px)' },
-      },
-      glow: {
-        '0%': { boxShadow: '0 0 20px #00FFFF' },
-        '100%': { boxShadow: '0 0 40px #00FFFF, 0 0 60px #00FFFF' },
+      },      glow: {
+        '0%': { boxShadow: '0 0 10px #00FFFF' },
+        '100%': { boxShadow: '0 0 20px #00FFFF, 0 0 30px #00FFFF' },
       },
       slideUp: {
         '0%': { transform: 'translateY(100px)', opacity: '0' },
