@@ -42,7 +42,7 @@ export default function Home() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gradient-to-br from-darkBg via-black to-cardBg flex flex-col items-center relative overflow-hidden px-4 sm:px-6 md:px-8 pt-24"
+      className="flex-1 bg-gradient-to-br from-darkBg via-black to-cardBg flex flex-col items-center relative overflow-hidden px-4 sm:px-6 md:px-8 pt-24"
     >
       {/* Background particles */}
       <div className="absolute inset-0">
@@ -125,7 +125,7 @@ export default function Home() {
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 1, duration: 0.8 }}
-        className="flex flex-col sm:flex-row gap-4 justify-center mt-12 z-20 px-4 sm:px-0"
+        className="flex flex-col sm:flex-row gap-4 justify-center mt-12 z-20 px-4 sm:px-0 mb-12"
       >
         <button className="group relative bg-gradient-to-r from-neon to-purple px-8 py-4 rounded-xl font-bold text-black transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-neon/50 overflow-hidden">
           <span className="relative z-10">Únete Ahora</span>

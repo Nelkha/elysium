@@ -6,49 +6,54 @@ import Clips from './components/Clips';
 import Miembros from './components/Miembros';
 import Recruitment from './components/Recruitment';
 import PageWrapper from './components/PageWrapper';
+import Footer from './components/Footer';
 
 function App() {
   const location = useLocation();
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <AnimatePresence mode="wait">        <Routes location={location} key={location.pathname}>
-          <Route
-            path="/"
-            element={
-              <PageWrapper>
-                <Home />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/clips"
-            element={
-              <PageWrapper>
-                <Clips />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/miembros"
-            element={
-              <PageWrapper>
-                <Miembros />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/recruitment"
-            element={
-              <PageWrapper>
-                <Recruitment />
-              </PageWrapper>
-            }
-          />
-        </Routes>
-      </AnimatePresence>
-    </>
+      <div className="flex-1 flex flex-col">
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route
+              path="/"
+              element={
+                <PageWrapper>
+                  <Home />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/clips"
+              element={
+                <PageWrapper>
+                  <Clips />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/miembros"
+              element={
+                <PageWrapper>
+                  <Miembros />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/recruitment"
+              element={
+                <PageWrapper>
+                  <Recruitment />
+                </PageWrapper>
+              }
+            />
+          </Routes>
+        </AnimatePresence>
+      </div>
+      <Footer />
+    </div>
   );
 }
 
