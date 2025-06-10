@@ -94,8 +94,8 @@ export default function Home() {
 
       {/* Contenedor imagen + video */}
       <div className="flex flex-col md:flex-row w-full max-w-7xl gap-6 md:gap-10 z-20 px-4 sm:px-0 items-start">
-        {/* Imagen a la izquierda (oculta en móvil) */}
-        <div className="w-full md:w-80 rounded-2xl overflow-hidden relative hidden md:block flex-shrink-0">
+        {/* Imagen a la izquierda (solo visible en lg y superior) */}
+        <div className="w-full md:w-80 rounded-2xl overflow-hidden relative hidden lg:block flex-shrink-0">
           <img
             ref={imageRef}
             src={homeleftImg}
@@ -104,10 +104,10 @@ export default function Home() {
           />
         </div>
 
-        {/* Video */}
+        {/* Video: ocupa todo el ancho si no hay imagen */}
         <div
           ref={videoRef}
-          className="w-full flex-1 relative rounded-2xl overflow-hidden bg-gradient-to-br from-cardBg to-gray-800 cursor-pointer border border-white/10 aspect-[16/9] md:aspect-auto"
+          className="w-full flex-1 relative rounded-2xl overflow-hidden bg-gradient-to-br from-cardBg to-gray-800 cursor-pointer border border-white/10 aspect-[16/9] md:aspect-auto mx-auto"
         >
           <iframe
             src="https://www.youtube.com/embed/I_qczEg0W20"

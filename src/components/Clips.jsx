@@ -34,7 +34,7 @@ export default function Clips() {
           </span>
         </motion.h2>
         
-        <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {clipPlaceholders.map((_, index) => (
             <motion.div
               key={index}
@@ -73,7 +73,7 @@ export default function Clips() {
       </div>
 
       {/* Character Image on the right with enhanced styling */}
-      <div className="w-1/3 flex items-center justify-center p-8 relative">
+      <div className="w-1/3 flex items-center justify-center p-8 relative hidden lg:flex">
         <motion.div 
           initial={{ x: 100, opacity: 0, rotate: -10 }}
           animate={{ x: 0, opacity: 1, rotate: 0 }}
