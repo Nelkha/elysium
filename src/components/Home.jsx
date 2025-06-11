@@ -110,7 +110,7 @@ export default function Home() {
           className="w-full flex-1 relative rounded-2xl overflow-hidden bg-gradient-to-br from-cardBg to-gray-800 cursor-pointer border border-white/10 aspect-[16/9] md:aspect-auto mx-auto"
         >
           <iframe
-            src="https://www.youtube.com/embed/I_qczEg0W20"
+            src="https://www.youtube.com/watch?v=jjuZga0W5ps"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
