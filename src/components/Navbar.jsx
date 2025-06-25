@@ -264,6 +264,18 @@ export default function Navbar() {
                   onClick={async () => {
                     setShowCodePopup(false);
                     await handleLogin(); // Aquí llamas a tu login con Google
+                    // Aquí haces el login con Google y luego:
+                    const res = await fetch("/api/registrarMiembro", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ email: user.email, codigo }),
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                      // Registro exitoso, puedes redirigir o mostrar mensaje
+                    } else {
+                      // Mostrar error
+                    }
                   }}
                   className="bg-green-500 px-4 py-2 rounded text-white font-bold"
                 >
