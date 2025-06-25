@@ -57,6 +57,17 @@ export default async function handler(req, res) {
     // Marca el código como usado
     await doc.ref.update({ usado: true });
 
+    // Actualiza la solicitud correspondiente (si existe)
+    const solicitudesSnapshot = await db
+      .collection("solicitudes")
+      .where("codigoRegistro", "==", codigo)
+      .limit(1)
+      .get();
+
+    if (!solicitudesSnapshot.empty) {
+      await solicitudesSnapshot.docs[0].ref.update({ codigoUsado: true });
+    }
+
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error(error);
