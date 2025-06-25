@@ -10,6 +10,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [showCodePopup, setShowCodePopup] = useState(false);
+  const [codigo, setCodigo] = useState("");
+  const [codigoValido, setCodigoValido] = useState(false);
+  const [codigoError, setCodigoError] = useState("");
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const esAdmin = useEsAdmin(user);
@@ -29,6 +33,23 @@ export default function Navbar() {
   const handleLogout = async () => {
     const auth = getAuth();
     await signOut(auth);
+  };
+
+  const validarCodigo = async () => {
+    setCodigoError("");
+    setCodigoValido(false);
+    // Llama a tu endpoint que valida el código en Firestore
+    const res = await fetch("/api/validarCodigo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ codigo }),
+    });
+    const data = await res.json();
+    if (data.valido) {
+      setCodigoValido(true);
+    } else {
+      setCodigoError("Código inválido o ya usado.");
+    }
   };
 
 
@@ -88,7 +109,10 @@ export default function Navbar() {
             <>
               <button
                 onClick={() => {
-                  navigate('/recruitment');
+                  setShowCodePopup(true);
+                  setCodigo("");
+                  setCodigoValido(false);
+                  setCodigoError("");
                   closeMenu();
                 }}
                 className="bg-gradient-to-r from-verde to-neon text-black font-bold px-4 py-2 rounded transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-verde/50"
@@ -211,6 +235,51 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Popup para código de invitación */}
+      {showCodePopup && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="bg-cardBg p-8 rounded-2xl shadow-xl text-white w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Código de invitación</h2>
+            <input
+              className="w-full mb-4 p-2 rounded text-black"
+              placeholder="Ingresa tu código"
+              value={codigo}
+              onChange={e => setCodigo(e.target.value)}
+              disabled={codigoValido}
+            />
+            {codigoError && <div className="text-red-400 mb-2">{codigoError}</div>}
+            <div className="flex gap-4 justify-end">
+              {!codigoValido && (
+                <button
+                  onClick={validarCodigo}
+                  className="bg-neon px-4 py-2 rounded text-black font-bold"
+                  disabled={!codigo}
+                >
+                  Validar
+                </button>
+              )}
+              {codigoValido && (
+                <button
+                  onClick={async () => {
+                    setShowCodePopup(false);
+                    await handleLogin(); // Aquí llamas a tu login con Google
+                  }}
+                  className="bg-green-500 px-4 py-2 rounded text-white font-bold"
+                >
+                  Registrarse con Google
+                </button>
+              )}
+              <button
+                onClick={() => setShowCodePopup(false)}
+                className="bg-gray-600 px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
