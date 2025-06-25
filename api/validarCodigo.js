@@ -1,10 +1,12 @@
-import { getApps, initializeApp, applicationDefault } from "firebase-admin/app";
+import { getApps, initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
-// Inicializa Firebase Admin solo si no está inicializado
+// Lee el JSON de la variable de entorno
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
 const app =
   getApps().length === 0
-    ? initializeApp({ credential: applicationDefault() })
+    ? initializeApp({ credential: cert(serviceAccount) })
     : getApps()[0];
 
 const db = getFirestore(app);
