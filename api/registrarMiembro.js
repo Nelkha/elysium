@@ -62,10 +62,18 @@ export default async function handler(req, res) {
     // Obtén los datos completos de la solicitud
     const solicitudData = solicitudesSnapshot.docs[0].data();
 
+    // Elimina los campos que no quieres copiar
+    const {
+      codigoUsado, // no copiar
+      usado: usadoSolicitud, // renombrado para evitar conflicto
+      ...miembroCompleto
+    } = solicitudData;
+
     // Crea el miembro con todos los datos de la solicitud y fecha de ingreso
     await db.collection("miembros").add({
-      ...solicitudData,
+      ...miembroCompleto,
       email, // asegura que el email sea el correcto
+      acceso: "miembro", // fuerza el acceso a "miembro"
       fechaingreso: Timestamp.now(),
     });
 
