@@ -4,8 +4,11 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 
 export function useEsAdmin(user) {
   const [esAdmin, setEsAdmin] = useState(false);
+  const [verificando, setVerificando] = useState(true);
 
   useEffect(() => {
+    let cancelado = false;
+    setVerificando(true);
     if (user && user.email) {
       const q = query(
         collection(db, "miembros"),
@@ -13,12 +16,17 @@ export function useEsAdmin(user) {
         where("acceso", "==", "admin")
       );
       getDocs(q).then(snapshot => {
-        setEsAdmin(!snapshot.empty);
+        if (!cancelado) {
+          setEsAdmin(!snapshot.empty);
+          setVerificando(false);
+        }
       });
     } else {
       setEsAdmin(false);
+      setVerificando(false);
     }
+    return () => { cancelado = true; };
   }, [user]);
 
-  return esAdmin;
+  return { esAdmin, verificando };
 }

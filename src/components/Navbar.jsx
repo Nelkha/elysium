@@ -16,7 +16,7 @@ export default function Navbar() {
   const [codigoError, setCodigoError] = useState("");
   const navigate = useNavigate();
   const { user, loading } = useAuth();
-  const esAdmin = useEsAdmin(user);
+  const { esAdmin, verificando } = useEsAdmin(user);
 
   const closeMenu = () => setIsOpen(false);
 
@@ -90,7 +90,7 @@ export default function Navbar() {
           >
             RECLUTAMIENTO
           </NavLink>
-          {!loading && user && esAdmin && (
+          {!loading && !verificando && user && esAdmin && (
             <NavLink
               to="/admin-solicitudes"
               className="relative px-4 py-2 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-700 transition-all"
@@ -160,7 +160,7 @@ export default function Navbar() {
             </NavLink>
           ))}
           {/* Link admin solo para admin */}
-          {!loading && user && esAdmin && (
+          {!loading && !verificando && user && esAdmin && (
             <NavLink
               to="/admin-solicitudes"
               onClick={closeMenu}
