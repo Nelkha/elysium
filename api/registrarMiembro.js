@@ -14,9 +14,9 @@ export default async function handler(req, res) {
   }
 
   const { email, codigo } = req.body;
+  console.log("Intentando registrar miembro:", { email, codigo });
 
   try {
-    // Busca el código válido
     const snapshot = await db
       .collection("codigos_registro")
       .where("codigo", "==", codigo)
@@ -24,6 +24,8 @@ export default async function handler(req, res) {
       .where("email", "==", email)
       .limit(1)
       .get();
+
+    console.log("Cantidad de docs encontrados:", snapshot.size);
 
     if (snapshot.empty) {
       return res.status(400).json({ success: false, error: "Código inválido, ya usado o email no coincide." });
