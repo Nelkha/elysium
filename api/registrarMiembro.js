@@ -47,6 +47,18 @@ export default async function handler(req, res) {
       ...miembroData
     } = data;
 
+    // Busca la solicitud original
+    const solicitudesSnapshot = await db
+      .collection("solicitudes")
+      .where("email", "==", email)
+      .where("codigoRegistro", "==", codigo)
+      .limit(1)
+      .get();
+
+    if (solicitudesSnapshot.empty) {
+      return res.status(400).json({ success: false, error: "No se encontró la solicitud correspondiente." });
+    }
+
     // Crea el miembro con los datos limpios y fecha de ingreso
     await db.collection("miembros").add({
       ...miembroData,
@@ -57,16 +69,7 @@ export default async function handler(req, res) {
     // Marca el código como usado
     await doc.ref.update({ usado: true });
 
-    // Actualiza la solicitud correspondiente (si existe)
-    const solicitudesSnapshot = await db
-      .collection("solicitudes")
-      .where("codigoRegistro", "==", codigo)
-      .limit(1)
-      .get();
-
-    if (!solicitudesSnapshot.empty) {
-      await solicitudesSnapshot.docs[0].ref.update({ codigoUsado: true });
-    }
+    await solicitudesSnapshot.docs[0].ref.update({ codigoUsado: true });
 
     return res.status(200).json({ success: true });
   } catch (error) {
