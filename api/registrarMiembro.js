@@ -32,13 +32,19 @@ export default async function handler(req, res) {
     const doc = snapshot.docs[0];
     const data = doc.data();
 
-    // Crea el miembro con los datos del código
+    // Limpia los campos que no quieres guardar en miembros
+    const {
+      usado,    // no guardar
+      codigo,   // no guardar
+      creado,   // no guardar
+      ...miembroData
+    } = data;
+
+    // Crea el miembro con los datos limpios y fecha de ingreso
     await db.collection("miembros").add({
-      ...data,
+      ...miembroData,
+      email, // asegura que el email sea el correcto
       fechaingreso: Timestamp.now(),
-      usado: undefined, // No copies el campo usado al miembro
-      codigo: undefined, // Opcional: si no quieres guardar el código en miembros
-      creado: undefined, // Opcional: si no quieres guardar la fecha de creación del código
     });
 
     // Marca el código como usado

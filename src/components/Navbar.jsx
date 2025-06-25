@@ -263,24 +263,31 @@ export default function Navbar() {
                 <button
                   onClick={async () => {
                     setShowCodePopup(false);
-                    // 1. Login con Google (NO loginSoloMiembros)
-                    const auth = getAuth();
-                    const provider = new GoogleAuthProvider();
-                    const result = await signInWithPopup(auth, provider);
-                    const email = result.user.email;
+                    try {
+                      // 1. Login con Google (NO loginSoloMiembros)
+                      const auth = getAuth();
+                      const provider = new GoogleAuthProvider();
+                      const result = await signInWithPopup(auth, provider);
+                      if (!result.user || !result.user.email) {
+                        setLoginError("No se pudo obtener el email de Google.");
+                        return;
+                      }
+                      const email = result.user.email;
 
-                    // 2. Registrar miembro en backend
-                    const res = await fetch("/api/registrarMiembro", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ email, codigo }),
-                    });
-                    const data = await res.json();
-                    if (data.success) {
-                      // Registro exitoso, puedes redirigir o mostrar mensaje
-                      navigate("/miembros");
-                    } else {
-                      setLoginError(data.error || "Error al registrar miembro");
+                      // 2. Registrar miembro en backend
+                      const res = await fetch("/api/registrarMiembro", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ email, codigo }),
+                      });
+                      const data = await res.json();
+                      if (data.success) {
+                        navigate("/miembros");
+                      } else {
+                        setLoginError(data.error || "Error al registrar miembro");
+                      }
+                    } catch (e) {
+                      setLoginError("El registro fue cancelado o falló el login con Google.");
                     }
                   }}
                   className="bg-green-500 px-4 py-2 rounded text-white font-bold"
