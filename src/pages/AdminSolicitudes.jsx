@@ -45,15 +45,22 @@ export default function AdminSolicitudes() {
 
   async function handleAprobar(solicitud) {
     const codigo = generarCodigoUnico(solicitud);
-    // Guarda el código en la colección codigos_registro
+
+    // Guarda el código en la colección codigos_registro (opcional)
     await addDoc(collection(db, "codigos_registro"), {
       email: solicitud.email,
       codigo,
       usado: false,
       creado: serverTimestamp()
     });
-    // Actualiza estado
-    await handleEstado(solicitud.id, "aprobada");
+
+    // Actualiza la solicitud: estado, código y marca como no usado
+    await updateDoc(doc(db, "solicitudes", solicitud.id), {
+      estado: "aprobada",
+      codigoRegistro: codigo,
+      codigoUsado: false
+    });
+
     // Envía email
     await sendEmail({
       to: solicitud.email,

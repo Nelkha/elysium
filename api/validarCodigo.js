@@ -1,10 +1,12 @@
-import { initializeApp, applicationDefault } from "firebase-admin/app";
+import { getApps, initializeApp, applicationDefault } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
-// Inicializa Firebase Admin solo una vez
-const app = initializeApp({
-  credential: applicationDefault(),
-});
+// Inicializa Firebase Admin solo si no está inicializado
+const app =
+  getApps().length === 0
+    ? initializeApp({ credential: applicationDefault() })
+    : getApps()[0];
+
 const db = getFirestore(app);
 
 export default async function handler(req, res) {
@@ -15,10 +17,10 @@ export default async function handler(req, res) {
   const { codigo } = req.body;
 
   try {
-    // Busca una solicitud aprobada con ese código y que no esté usada
+    // Busca una solicitud aprobada con ese código y que no esté usado
     const snapshot = await db
       .collection("solicitudes")
-      .where("codigo", "==", codigo)
+      .where("codigoRegistro", "==", codigo)
       .where("estado", "==", "aprobada")
       .where("codigoUsado", "==", false)
       .limit(1)
