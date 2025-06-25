@@ -59,9 +59,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: "No se encontró la solicitud correspondiente." });
     }
 
-    // Crea el miembro con los datos limpios y fecha de ingreso
+    // Obtén los datos completos de la solicitud
+    const solicitudData = solicitudesSnapshot.docs[0].data();
+
+    // Crea el miembro con todos los datos de la solicitud y fecha de ingreso
     await db.collection("miembros").add({
-      ...miembroData,
+      ...solicitudData,
       email, // asegura que el email sea el correcto
       fechaingreso: Timestamp.now(),
     });
