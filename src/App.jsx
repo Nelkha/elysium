@@ -7,6 +7,7 @@ import Miembros from './components/Miembros';
 import Recruitment from './components/Recruitment';
 import PageWrapper from './components/PageWrapper';
 import Footer from './components/Footer';
+import AdminSolicitudes from './pages/AdminSolicitudes';
 
 function App() {
   const location = useLocation();
@@ -46,6 +47,14 @@ function App() {
               element={
                 <PageWrapper>
                   <Recruitment />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/admin-solicitudes"
+              element={
+                <PageWrapper>
+                  <AdminSolicitudes />
                 </PageWrapper>
               }
             />
