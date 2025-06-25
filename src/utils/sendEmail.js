@@ -13,18 +13,3 @@ export async function sendEmail({ to, subject, text, html }) {
   }
 }
 
-await sendEmail({
-  to: solicitud.email,
-  subject: "¡Solicitud aprobada!",
-  html: `
-    <div style="font-family: 'Segoe UI', Arial, sans-serif; background: #18181b; color: #fff; padding: 24px; border-radius: 12px;">
-      <h2 style="color: #a78bfa;">¡Saludos, aventurero!</h2>
-      <p>
-        ¡Felicitaciones! Tu solicitud fue aprobada.<br>
-        Usa este código único para registrarte: <b>${codigo}</b>
-      </p>
-      <hr style="border: none; border-top: 1px solid #a78bfa; margin: 24px 0;">
-      <p style="color: #a78bfa;">Equipo Elysium</p>
-    </div>
-  `
-});

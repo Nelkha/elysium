@@ -58,7 +58,17 @@ export default function AdminSolicitudes() {
     await sendEmail({
       to: solicitud.email,
       subject: "¡Solicitud aprobada!",
-      text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${codigo}`
+      html: `
+        <div style="font-family: 'Segoe UI', Arial, sans-serif; background: #18181b; color: #fff; padding: 24px; border-radius: 12px;">
+          <h2 style="color: #a78bfa;">¡Saludos, aventurero!</h2>
+          <p>
+            ¡Felicitaciones! Tu solicitud fue aprobada.<br>
+            Usa este código único para registrarte: <b>${codigo}</b>
+          </p>
+          <hr style="border: none; border-top: 1px solid #a78bfa; margin: 24px 0;">
+          <p style="color: #a78bfa;">Equipo Elysium</p>
+        </div>
+      `
     });
   }
 
@@ -75,7 +85,17 @@ export default function AdminSolicitudes() {
     await sendEmail({
       to: solicitudRechazo.email,
       subject: "Solicitud rechazada",
-      text: `Lamentablemente tu solicitud fue rechazada. Motivo: ${motivo}`
+      html: `
+        <div style="font-family: 'Segoe UI', Arial, sans-serif; background: #18181b; color: #fff; padding: 24px; border-radius: 12px;">
+          <h2 style="color: #f87171;">Saludos, aventurero...</h2>
+          <p>
+            Lamentablemente tu solicitud fue rechazada.<br>
+            Motivo: <b>${motivo}</b>
+          </p>
+          <hr style="border: none; border-top: 1px solid #f87171; margin: 24px 0;">
+          <p style="color: #a78bfa;">Equipo Elysium</p>
+        </div>
+      `
     });
     setShowMotivo(false);
     setSolicitudRechazo(null);
