@@ -118,9 +118,44 @@ export default function AdminSolicitudes() {
       .substring(0, 16); // 16 caracteres
   }
 
-  if (loading || verificando) return <div>Cargando...</div>;
-  if (!user) return <div>Debes iniciar sesión</div>;
-  if (!esAdmin) return <div>Acceso solo para administradores.</div>;
+  if (loading || verificando) return (
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-darkBg via-black to-cardBg">
+      <span className="text-white text-2xl font-poppins">Cargando...</span>
+    </div>
+  );
+  if (!user) {
+    const idioma = navigator.language || navigator.userLanguage;
+    const userAgent = navigator.userAgent;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-darkBg via-black to-cardBg">
+        <div className="bg-cardBg/80 border border-red-500/40 rounded-3xl p-12 text-center shadow-lg">
+          <h2 className="text-3xl font-bold text-red-500 font-poppins mb-4 animate-pulse">
+            ¿Qué haces aquí intruso?
+          </h2>
+          <p className="text-lg text-white font-poppins mb-4">
+            Este territorio no te pertenece,<br />
+            <span className="text-red-400 font-bold">aléjate lo más rápido posible o morirás.</span>
+          </p>
+          <div className="mt-6 text-sm text-gray-400 font-mono">
+            <div>🌐 Idioma detectado: <span className="text-neon">{idioma}</span></div>
+            <div className="truncate max-w-xs mx-auto">🖥️ Navegador: <span className="text-neon">{userAgent}</span></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (!esAdmin) return (
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-darkBg via-black to-cardBg">
+      <div className="bg-cardBg/80 border border-yellow-500/40 rounded-3xl p-12 text-center shadow-lg">
+        <h2 className="text-3xl font-bold text-yellow-400 font-poppins mb-4">
+          Acceso solo para administradores.
+        </h2>
+        <p className="text-lg text-white font-poppins">
+          No tienes permisos para ver esta sección.
+        </p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-darkBg via-black to-cardBg pt-24 px-4 flex flex-col items-center">
