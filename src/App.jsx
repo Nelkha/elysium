@@ -65,7 +65,7 @@ function App() {
               path="/modificarWish"
               element={
                 <PageWrapper>
-                  <modificarWish />
+                  <ModificarWish />
                 </PageWrapper>
               }
             />
