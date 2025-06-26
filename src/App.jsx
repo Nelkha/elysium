@@ -9,6 +9,7 @@ import PageWrapper from './components/PageWrapper';
 import Footer from './components/Footer';
 import AdminSolicitudes from './pages/AdminSolicitudes';
 import ModificarWish from './pages/modificarWish';
+import Wishlist from './components/Wishlist';
 
 function App() {
   const location = useLocation();
@@ -64,6 +65,14 @@ function App() {
               element={
                 <PageWrapper>
                   <ModificarWish />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/wishlist"
+              element={
+                <PageWrapper>
+                  <Wishlist />
                 </PageWrapper>
               }
             />
