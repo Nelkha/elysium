@@ -10,7 +10,7 @@ import Footer from './components/Footer';
 import AdminSolicitudes from './pages/AdminSolicitudes';
 
 import Wishlist from './components/Wishlist';
-import ModificarWish from './components/ModificarWish';
+import ModificarWish from './pages/ModificarWish';
 
 
 function App() {
