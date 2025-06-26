@@ -46,7 +46,6 @@ export default function AdminSolicitudes() {
   async function handleAprobar(solicitud) {
     const codigo = generarCodigoUnico(solicitud);
 
-    // Guarda el código en la colección codigos_registro (opcional)
     await addDoc(collection(db, "codigos_registro"), {
       email: solicitud.email,
       codigo,
@@ -54,7 +53,6 @@ export default function AdminSolicitudes() {
       creado: serverTimestamp()
     });
 
-    // Actualiza la solicitud: estado, código y marca como no usado
     await updateDoc(doc(db, "solicitudes", solicitud.id), {
       estado: "aprobada",
       codigoRegistro: codigo,
@@ -67,6 +65,13 @@ export default function AdminSolicitudes() {
       subject: "¡Solicitud aprobada!",
       text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${codigo}`
     });
+
+    // ACTUALIZA EL ESTADO LOCAL PARA OCULTAR LOS ICONOS
+    setSolicitudes(solicitudes =>
+      solicitudes.map(s =>
+        s.id === solicitud.id ? { ...s, estado: "aprobada", codigoRegistro: codigo, codigoUsado: false } : s
+      )
+    );
   }
 
   function handleRechazarPopup(solicitud) {
