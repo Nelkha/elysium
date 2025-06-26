@@ -6,6 +6,30 @@ import { collection, getDocs } from "firebase/firestore";
 export default function Miembros() {
   const [miembros, setMiembros] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pagina, setPagina] = useState(1);
+
+  // Hardcodea el líder
+  const lider = {
+    id: "lider-nex",
+    nombre: "Nex",
+    rol: "Healer",
+    clase: "Varita-Arco",
+    acceso: "admin",
+    nivel: 55,
+    gs: 9999,
+    build: "",
+  };
+
+  // Filtra al líder de la lista si llegara a estar en la base
+  const resto = miembros.filter(m => m.nombre !== "Nex");
+
+  const porPagina = 12;
+  const totalPaginas = Math.ceil(resto.length / porPagina);
+
+  const miembrosPagina = resto.slice((pagina - 1) * porPagina, pagina * porPagina);
+
+  const handleAnterior = () => setPagina(p => Math.max(1, p - 1));
+  const handleSiguiente = () => setPagina(p => Math.min(totalPaginas, p + 1));
 
   useEffect(() => {
     async function fetchMiembros() {
@@ -24,21 +48,6 @@ export default function Miembros() {
       </div>
     );
   }
-
-  // Hardcodea el líder
-  const lider = {
-    id: "lider-nex",
-    nombre: "Nex",
-    rol: "Healer",
-    clase: "Varita-Arco",
-    acceso: "admin",
-    nivel: 55,
-    gs: 9999,
-    build: "",
-  };
-
-  // Filtra al líder de la lista si llegara a estar en la base
-  const resto = miembros.filter(m => m.nombre !== "Nex");
 
   return (
     <motion.div
@@ -86,6 +95,9 @@ export default function Miembros() {
                   <div className="bg-dorado/80 rounded px-2 py-1 text-center">
                     <span className="text-black text-xs font-bold">Lv{lider.nivel}</span>
                   </div>
+                  <div className="bg-neon/80 rounded px-2 py-1 text-center ml-1">
+                    <span className="text-black text-xs font-bold">GS {lider.gs}</span>
+                  </div>
                 </div>
                 <div className="bg-gray-700 rounded px-2 py-1 text-center mt-1">
                   <span className="text-neon text-xs font-semibold">{lider.clase}</span>
@@ -111,7 +123,7 @@ export default function Miembros() {
 
         {/* Grid de miembros */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-          {resto.map((miembro, index) => (
+          {miembrosPagina.map((miembro, index) => (
             <motion.div
               key={miembro.id}
               initial={{ opacity: 0, y: 50, rotateY: -15 }}
@@ -128,7 +140,19 @@ export default function Miembros() {
                 <div className="relative bg-gradient-to-br from-cardBg to-gray-800 rounded-xl border border-white/10 group-hover:border-transparent transition-all duration-300 overflow-hidden">
                   <div className="relative aspect-square bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-neon/20 to-purple/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <span className="relative z-10 text-gray-400 text-sm font-medium">Avatar</span>
+                    {miembro.fotoPerfil ? (
+                      <img
+                        src={miembro.fotoPerfil}
+                        alt={miembro.nombre}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src="/avatar-placeholder.png"
+                        alt="Avatar"
+                        className="w-2/3 h-2/3 object-contain opacity-60"
+                      />
+                    )}
                   </div>
                   <div className="p-3 space-y-2">
                     <div className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg px-3 py-2 text-center group-hover:from-neon/20 group-hover:to-purple/20 transition-all duration-300">
@@ -141,6 +165,9 @@ export default function Miembros() {
                       <div className="bg-dorado/80 rounded px-2 py-1 text-center">
                         <span className="text-black text-xs font-bold">Lv{miembro.nivel}</span>
                       </div>
+                      <div className="bg-neon/80 rounded px-2 py-1 text-center ml-1">
+                        <span className="text-black text-xs font-bold">GS {miembro.gs}</span>
+                      </div>
                     </div>
                     {/* Mostrar la clase */}
                     <div className="bg-gray-700 rounded px-2 py-1 text-center mt-1">
@@ -152,6 +179,29 @@ export default function Miembros() {
             </motion.div>
           ))}
         </div>
+
+        {/* Paginación */}
+        {totalPaginas > 1 && (
+          <div className="flex justify-center items-center gap-4 mt-6">
+            <button
+              onClick={handleAnterior}
+              disabled={pagina === 1}
+              className="px-4 py-2 rounded bg-gray-700 text-white font-bold disabled:opacity-50"
+            >
+              Anterior
+            </button>
+            <span className="text-white font-bold">
+              Página {pagina} de {totalPaginas}
+            </span>
+            <button
+              onClick={handleSiguiente}
+              disabled={pagina === totalPaginas}
+              className="px-4 py-2 rounded bg-gray-700 text-white font-bold disabled:opacity-50"
+            >
+              Siguiente
+            </button>
+          </div>
+        )}
       </div>
     </motion.div>
   );
