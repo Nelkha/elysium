@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { db, storage } from "../firebase";
+import { db} from "../firebase";
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import { useAuth } from "../hooks/useAuth";
 import { motion } from "framer-motion";
 
@@ -134,6 +134,8 @@ export default function ModificarPerfil() {
   const handleFotoChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    console.log("Client-ID:", IMGUR_CLIENT_ID);
+    console.log("Archivo:", file);
     setError("");
     setExito("");
     setSubiendoFoto(true);
