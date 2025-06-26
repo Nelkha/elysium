@@ -207,6 +207,7 @@ export default function AdminSolicitudes() {
               <th className="px-3 py-2 font-bold">Clase</th>
               <th className="px-3 py-2 font-bold">Rol</th>
               <th className="px-3 py-2 font-bold">Nivel</th>
+              <th className="px-3 py-2 font-bold">GS</th> {/* Nueva columna */}
               <th className="px-3 py-2 font-bold">Estado</th>
               <th className="px-3 py-2 font-bold">Fecha</th>
               <th className="px-3 py-2 font-bold">Mensaje</th>
@@ -216,7 +217,7 @@ export default function AdminSolicitudes() {
           <tbody>
             {solicitudesFiltradas.length === 0 && (
               <tr>
-                <td colSpan={8} className="text-center py-8 text-gray-400">No hay solicitudes.</td>
+                <td colSpan={9} className="text-center py-8 text-gray-400">No hay solicitudes.</td>
               </tr>
             )}
             {solicitudesFiltradas.map(s => (
@@ -225,6 +226,7 @@ export default function AdminSolicitudes() {
                 <td className="px-3 py-2">{s.clase}</td>
                 <td className="px-3 py-2">{s.rol}</td>
                 <td className="px-3 py-2">{s.nivel}</td>
+                <td className="px-3 py-2">{s.gs}</td> {/* Muestra GS */}
                 <td className="px-3 py-2">{s.estado}</td>
                 <td className="px-3 py-2">
                   {s.fechasolicitud
