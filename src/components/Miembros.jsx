@@ -9,20 +9,11 @@ export default function Miembros() {
   const [pagina, setPagina] = useState(1);
   const [overlayIndex, setOverlayIndex] = useState(null);
 
-  // Hardcodea el líder
-  const lider = {
-    id: "lider-nex",
-    nombre: "Nex",
-    rol: "Healer",
-    clase: "Varita-Arco",
-    acceso: "admin",
-    nivel: 55,
-    gs: 9999,
-    build: "",
-  };
+  // Busca al líder directamente desde los miembros
+  const lider = miembros.find(m => m.nombre?.toLowerCase() === "nex");
 
   // Filtra al líder de la lista si llegara a estar en la base
-  const resto = miembros.filter(m => m.nombre !== "Nex");
+  const resto = miembros.filter(m => m.nombre?.toLowerCase() !== "nex");
 
   const porPagina = 12;
   const totalPaginas = Math.ceil(resto.length / porPagina);
@@ -69,45 +60,58 @@ export default function Miembros() {
       </div>
 
       {/* Bloque del líder */}
-      <div className="w-1/3 flex items-center justify-center p-8 relative hidden lg:flex">
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="group relative w-full max-w-xs"
-          style={{ perspective: '1000px' }}
+      {lider && (
+        <div
+          className="w-1/3 flex items-center justify-center p-8 relative hidden lg:flex cursor-pointer"
+          onClick={() => setOverlayIndex("lider")}
         >
-          <div className="relative transition-all duration-300 group-hover:scale-105 transform-gpu">
-            <div className="absolute inset-0 bg-gradient-to-r from-neon via-purple to-pink p-1 rounded-2xl opacity-100 animate-glow">
-              <div className="w-full h-full bg-cardBg rounded-2xl"></div>
-            </div>
-            <div className="relative bg-gradient-to-br from-cardBg to-gray-800 rounded-2xl border-2 border-yellow-400 shadow-xl overflow-hidden">
-              <div className="relative aspect-square bg-gradient-to-br from-yellow-400/30 to-purple/20 flex items-center justify-center overflow-hidden">
-                <span className="relative z-10 text-yellow-400 text-2xl font-bold font-poppins">👑</span>
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="group relative w-full max-w-xs"
+            style={{ perspective: '1000px' }}
+          >
+            <div className="relative transition-all duration-300 group-hover:scale-105 transform-gpu">
+              <div className="absolute inset-0 bg-gradient-to-r from-neon via-purple to-pink p-1 rounded-2xl opacity-100 animate-glow">
+                <div className="w-full h-full bg-cardBg rounded-2xl"></div>
               </div>
-              <div className="p-5 space-y-3">
-                <div className="bg-gradient-to-r from-yellow-400 to-purple-400 rounded-lg px-3 py-2 text-center">
-                  <span className="text-black text-lg font-bold">{lider.nombre}</span>
+              <div className="relative bg-gradient-to-br from-cardBg to-gray-800 rounded-2xl border-2 border-yellow-400 shadow-xl overflow-hidden">
+                <div className="relative aspect-square bg-gradient-to-br from-yellow-400/30 to-purple/20 flex items-center justify-center overflow-hidden">
+                  {lider.fotoPerfil ? (
+                    <img
+                      src={lider.fotoPerfil}
+                      alt={lider.nombre}
+                      className="w-2/3 h-2/3 object-contain rounded-full border-4 border-yellow-400 bg-gray-900"
+                    />
+                  ) : (
+                    <span className="relative z-10 text-yellow-400 text-2xl font-bold font-poppins">👑</span>
+                  )}
                 </div>
-                <div className="flex justify-between gap-1">
-                  <div className="bg-purple/80 rounded px-2 py-1 text-center flex-1">
-                    <span className="text-white text-xs font-bold">{lider.rol}</span>
+                <div className="p-5 space-y-3">
+                  <div className="bg-gradient-to-r from-yellow-400 to-purple-400 rounded-lg px-3 py-2 text-center">
+                    <span className="text-black text-lg font-bold">{lider.nombre}</span>
                   </div>
-                  <div className="bg-dorado/80 rounded px-2 py-1 text-center">
-                    <span className="text-black text-xs font-bold">Lv{lider.nivel}</span>
+                  <div className="flex justify-between gap-1">
+                    <div className="bg-purple/80 rounded px-2 py-1 text-center flex-1">
+                      <span className="text-white text-xs font-bold">{lider.rol}</span>
+                    </div>
+                    <div className="bg-dorado/80 rounded px-2 py-1 text-center">
+                      <span className="text-black text-xs font-bold">Lv{lider.nivel}</span>
+                    </div>
+                    <div className="bg-neon/80 rounded px-2 py-1 text-center ml-1">
+                      <span className="text-black text-xs font-bold">GS {lider.gs}</span>
+                    </div>
                   </div>
-                  <div className="bg-neon/80 rounded px-2 py-1 text-center ml-1">
-                    <span className="text-black text-xs font-bold">GS {lider.gs}</span>
+                  <div className="bg-gray-700 rounded px-2 py-1 text-center mt-1">
+                    <span className="text-neon text-xs font-semibold">{lider.clase}</span>
                   </div>
-                </div>
-                <div className="bg-gray-700 rounded px-2 py-1 text-center mt-1">
-                  <span className="text-neon text-xs font-semibold">{lider.clase}</span>
                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* Members Grid on the right */}
       <div className="flex-1 p-8 relative z-10 flex flex-col gap-8">
@@ -226,41 +230,86 @@ export default function Miembros() {
             className="bg-gradient-to-br from-cardBg to-gray-800 rounded-2xl border-2 border-neon p-8 max-w-md w-full mx-4 shadow-2xl flex flex-col items-start text-lg text-left"
             onClick={e => e.stopPropagation()}
           >
-            <div className="text-neon font-bold text-3xl mb-4 flex items-center gap-2">
-              <span>👤</span> {miembrosPagina[overlayIndex]?.nombre}
-            </div>
-            <div className="flex gap-2 mb-3">
-              <span title="Clase" className="text-xl">🧙‍♂️</span>
-              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.clase}</span>
-            </div>
-            <div className="flex gap-2 mb-3">
-              <span title="Rol" className="text-xl">🛡️</span>
-              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.rol}</span>
-            </div>
-            <div className="flex gap-2 mb-3">
-              <span title="Nivel" className="text-xl">⭐</span>
-              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.nivel}</span>
-            </div>
-            <div className="flex gap-2 mb-3">
-              <span title="GS" className="text-xl">⚔️</span>
-              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.gs}</span>
-            </div>
-            <div className="flex gap-2 mb-3">
-              <span title="Maestría 1" className="text-xl">🪄</span>
-              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.maestria1}</span>
-            </div>
-            <div className="flex gap-2 mb-3">
-              <span title="Maestría 2" className="text-xl">🏹</span>
-              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.maestria2}</span>
-            </div>
-            <div className="text-neon text-base mt-4 italic">
-              <span className="font-bold">Frase favorita: </span>
-              {miembrosPagina[overlayIndex]?.frasefavorita || "Sin frase favorita"}
-            </div>
-            <div className="text-neon text-base mt-2 italic">
-              <span className="font-bold">Mensaje personal: </span>
-              {miembrosPagina[overlayIndex]?.mensajepersonal || "Sin mensaje personal"}
-            </div>
+            {overlayIndex === "lider"
+              ? (
+                <>
+                  <div className="text-neon font-bold text-3xl mb-4 flex items-center gap-2">
+                    <span>👑</span> {lider?.nombre}
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Clase" className="text-xl">🧙‍♂️</span>
+                    <span className="text-white text-lg">{lider?.clase}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Rol" className="text-xl">🛡️</span>
+                    <span className="text-white text-lg">{lider?.rol}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Nivel" className="text-xl">⭐</span>
+                    <span className="text-white text-lg">{lider?.nivel}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="GS" className="text-xl">⚔️</span>
+                    <span className="text-white text-lg">{lider?.gs}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Maestría 1" className="text-xl">🪄</span>
+                    <span className="text-white text-lg">{lider?.maestria1}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Maestría 2" className="text-xl">🏹</span>
+                    <span className="text-white text-lg">{lider?.maestria2}</span>
+                  </div>
+                  <div className="text-neon text-base mt-4 italic">
+                    <span className="font-bold">Frase favorita: </span>
+                    {lider?.frasefavorita || "Sin frase favorita"}
+                  </div>
+                  <div className="text-neon text-base mt-2 italic">
+                    <span className="font-bold">Mensaje personal: </span>
+                    {lider?.mensajepersonal || "Sin mensaje personal"}
+                  </div>
+                </>
+              )
+              : (
+                <>
+                  <div className="text-neon font-bold text-3xl mb-4 flex items-center gap-2">
+                    <span>👤</span> {miembrosPagina[overlayIndex]?.nombre}
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Clase" className="text-xl">🧙‍♂️</span>
+                    <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.clase}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Rol" className="text-xl">🛡️</span>
+                    <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.rol}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Nivel" className="text-xl">⭐</span>
+                    <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.nivel}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="GS" className="text-xl">⚔️</span>
+                    <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.gs}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Maestría 1" className="text-xl">🪄</span>
+                    <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.maestria1}</span>
+                  </div>
+                  <div className="flex gap-2 mb-3">
+                    <span title="Maestría 2" className="text-xl">🏹</span>
+                    <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.maestria2}</span>
+                  </div>
+                  <div className="text-neon text-base mt-4 italic">
+                    <span className="font-bold">Frase favorita: </span>
+                    {miembrosPagina[overlayIndex]?.frasefavorita || "Sin frase favorita"}
+                  </div>
+                  <div className="text-neon text-base mt-2 italic">
+                    <span className="font-bold">Mensaje personal: </span>
+                    {miembrosPagina[overlayIndex]?.mensajepersonal || "Sin mensaje personal"}
+                  </div>
+                </>
+              )
+            }
             <button
               className="mt-6 px-4 py-2 bg-neon text-black rounded font-bold text-lg"
               onClick={() => setOverlayIndex(null)}
