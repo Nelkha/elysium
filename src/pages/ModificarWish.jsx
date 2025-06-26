@@ -11,6 +11,8 @@ const ARMAS_ARCHBOSS = [
   "Deluzhnoa’s Permafrost Razors",
   "Deluzhnoa’s Arc of Frozen Death",
   "Deluzhnoa’s Ancient Petrified Staff",
+  "Deluzhnoa's Serrated Shard",
+
 
   // 🔹 Tevent
   "Tevent’s Fangs of Fury",
