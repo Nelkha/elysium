@@ -155,11 +155,15 @@ export default function Miembros() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <img
-                        src="/avatar-placeholder.png"
-                        alt="Avatar"
-                        className="w-2/3 h-2/3 object-contain opacity-60"
-                      />
+                      <div className="flex items-center justify-center w-full h-full">
+                        <span className="text-neon font-bold text-xs text-center px-2 animate-pulse"
+                          style={{
+                            textShadow: "0 0 8px #00fff7, 0 0 16px #a855f7, 0 0 32px #00fff7"
+                          }}
+                        >
+                          SOY MANCO<br />PORQUE NO TENGO FOTO
+                        </span>
+                      </div>
                     )}
                   </div>
                   <div className="p-3 space-y-2">
