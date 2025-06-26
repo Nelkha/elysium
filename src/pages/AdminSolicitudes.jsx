@@ -59,19 +59,15 @@ export default function AdminSolicitudes() {
       codigoUsado: false
     });
 
-    // Envía email
     await sendEmail({
       to: solicitud.email,
       subject: "¡Solicitud aprobada!",
       text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${codigo}`
     });
 
-    // ACTUALIZA EL ESTADO LOCAL PARA OCULTAR LOS ICONOS
-    setSolicitudes(solicitudes =>
-      solicitudes.map(s =>
-        s.id === solicitud.id ? { ...s, estado: "aprobada", codigoRegistro: codigo, codigoUsado: false } : s
-      )
-    );
+    // Recarga las solicitudes desde Firestore
+    const snapshot = await getDocs(collection(db, "solicitudes"));
+    setSolicitudes(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   }
 
   function handleRechazarPopup(solicitud) {
