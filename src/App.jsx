@@ -8,8 +8,9 @@ import Recruitment from './components/Recruitment';
 import PageWrapper from './components/PageWrapper';
 import Footer from './components/Footer';
 import AdminSolicitudes from './pages/AdminSolicitudes';
-import ModificarWish from './pages/modificarWish';
+import ModificarWish from './pages/modificarWish.jsx';
 import Wishlist from './components/Wishlist';
+
 
 function App() {
   const location = useLocation();

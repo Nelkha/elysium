@@ -92,6 +92,7 @@ export default function Navbar() {
             RECLUTAMIENTO
           </NavLink>
           {!loading && !verificando && user && esAdmin && (
+            
             <NavLink
               to="/admin-solicitudes"
               className="relative px-4 py-2 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-700 transition-all"
@@ -149,12 +150,19 @@ export default function Navbar() {
                     className="absolute left-0 top-full mt-2 bg-cardBg border border-white/10 rounded-lg shadow-lg z-50 min-w-[180px]"
                   >
                     <NavLink
-                      to="/modificarWish"
+                      to="/ModificarWish"
                       onClick={() => setShowUserMenu(false)}
                       className="block w-full text-left px-4 py-2 text-white hover:bg-white/10 rounded-t-lg"
                     >
                       Modificar wish
                     </NavLink>
+                   <NavLink
+        to="/wishlist"
+        onClick={() => setShowUserMenu(false)}
+        className="block w-full text-left px-4 py-2 text-white hover:bg-white/10 rounded-b-lg"
+      >
+        Wishlist
+      </NavLink>
                   </motion.div>
                 )}
               </AnimatePresence>
