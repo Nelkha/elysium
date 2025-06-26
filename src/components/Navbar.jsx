@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, User } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useEsAdmin } from '../hooks/useEsAdmin';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
@@ -14,6 +14,7 @@ export default function Navbar() {
   const [codigo, setCodigo] = useState("");
   const [codigoValido, setCodigoValido] = useState(false);
   const [codigoError, setCodigoError] = useState("");
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const { esAdmin, verificando } = useEsAdmin(user);
@@ -128,12 +129,42 @@ export default function Navbar() {
             </>
           )}
           {!loading && user && (
-            <button
-              onClick={handleLogout}
-              className="bg-gray-700 px-4 py-2 rounded text-white font-bold ml-4"
-            >
-              Cerrar sesión
-            </button>
+            <div className="relative flex items-center">
+              {/* Icono de persona */}
+              <button
+                onClick={() => setShowUserMenu(v => !v)}
+                className="flex items-center justify-center bg-gray-800 hover:bg-gray-700 rounded-full w-10 h-10 mr-2 transition"
+                title="Opciones de usuario"
+              >
+                <User className="text-white" size={22} />
+              </button>
+              {/* Menú desplegable */}
+              <AnimatePresence>
+                {showUserMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute left-0 top-full mt-2 bg-cardBg border border-white/10 rounded-lg shadow-lg z-50 min-w-[180px]"
+                  >
+                    <NavLink
+                      to="/modificarWish"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-white hover:bg-white/10 rounded-t-lg"
+                    >
+                      Modificar wish
+                    </NavLink>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <button
+                onClick={handleLogout}
+                className="bg-gray-700 px-4 py-2 rounded text-white font-bold ml-4"
+              >
+                Cerrar sesión
+              </button>
+            </div>
           )}
         </div>
 
