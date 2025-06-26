@@ -8,8 +8,9 @@ import Recruitment from './components/Recruitment';
 import PageWrapper from './components/PageWrapper';
 import Footer from './components/Footer';
 import AdminSolicitudes from './pages/AdminSolicitudes';
-import ModificarWish from './pages/modificarWish';
+import modificarWish from './pages/modificarWish';
 import Wishlist from './components/Wishlist';
+import ModificarWish from './pages/modificarWish';
 
 
 function App() {
