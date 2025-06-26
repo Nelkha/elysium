@@ -42,7 +42,7 @@ export default function Home() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex-1 bg-gradient-to-br from-darkBg via-black to-cardBg flex flex-col items-center relative overflow-hidden px-4 sm:px-6 md:px-8 pt-24"
+      className="flex-1 min-h-screen bg-gradient-to-br from-darkBg via-black to-cardBg flex flex-col items-center relative overflow-hidden px-4 sm:px-6 md:px-8 pt-24"
     >
       {/* Background particles */}
       <div className="absolute inset-0">
