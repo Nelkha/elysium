@@ -70,8 +70,7 @@ export default function Navbar() {
               key={path}
               to={path}
               className={({ isActive }) =>
-                `relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/10 ${
-                  isActive ? 'text-neon bg-white/10' : 'text-white hover:text-neon'
+                `relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/10 ${isActive ? 'text-neon bg-white/10' : 'text-white hover:text-neon'
                 }`
               }
               onClick={closeMenu}
@@ -83,8 +82,7 @@ export default function Navbar() {
           <NavLink
             to="/recruitment"
             className={({ isActive }) =>
-              `relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/10 font-bold ${
-                isActive ? 'text-yellow-400 bg-white/10' : 'text-yellow-400 hover:text-yellow-300'
+              `relative px-4 py-2 rounded-lg transition-all duration-300 hover:bg-white/10 font-bold ${isActive ? 'text-yellow-400 bg-white/10' : 'text-yellow-400 hover:text-yellow-300'
               }`
             }
             onClick={closeMenu}
@@ -92,7 +90,7 @@ export default function Navbar() {
             RECLUTAMIENTO
           </NavLink>
           {!loading && !verificando && user && esAdmin && (
-            
+
             <NavLink
               to="/admin-solicitudes"
               className="relative px-4 py-2 rounded-lg bg-purple-600 text-white font-bold hover:bg-purple-700 transition-all"
@@ -103,7 +101,7 @@ export default function Navbar() {
           )}
         </div>
 
-  
+
 
         {/* Botones login/signup en escritorio */}
         <div className="flex items-center gap-2">
@@ -156,13 +154,27 @@ export default function Navbar() {
                     >
                       Modificar wish
                     </NavLink>
-                   <NavLink
-        to="/wishlist"
-        onClick={() => setShowUserMenu(false)}
-        className="block w-full text-left px-4 py-2 text-white hover:bg-white/10 rounded-b-lg"
-      >
-        Wishlist
-      </NavLink>
+                    <NavLink
+                      to="/subir-video"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-white hover:bg-white/10"
+                    >
+                      Subir video
+                    </NavLink>
+                    <NavLink
+                      to="/wishlist"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-white hover:bg-white/10 rounded-b-lg"
+                    >
+                      Wishlist
+                    </NavLink>
+                    <NavLink
+                      to="/modificar-perfil"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-white hover:bg-white/10"
+                    >
+                      Modificar perfil
+                    </NavLink>
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -19,6 +19,7 @@ export default function AdminSolicitudes() {
   const [motivoRechazo, setMotivoRechazo] = useState("");
   const [motivoOtro, setMotivoOtro] = useState("");
   const [solicitudRechazo, setSolicitudRechazo] = useState(null);
+  const [procesandoId, setProcesandoId] = useState(null);
 
   useEffect(() => {
     if (!loading && !verificando && user && esAdmin) {
@@ -44,30 +45,35 @@ export default function AdminSolicitudes() {
   };
 
   async function handleAprobar(solicitud) {
-    const codigo = generarCodigoUnico(solicitud);
+    setProcesandoId(solicitud.id);
+    try {
+      const codigo = generarCodigoUnico(solicitud);
 
-    await addDoc(collection(db, "codigos_registro"), {
-      email: solicitud.email,
-      codigo,
-      usado: false,
-      creado: serverTimestamp()
-    });
+      await addDoc(collection(db, "codigos_registro"), {
+        email: solicitud.email,
+        codigo,
+        usado: false,
+        creado: serverTimestamp()
+      });
 
-    await updateDoc(doc(db, "solicitudes", solicitud.id), {
-      estado: "aprobada",
-      codigoRegistro: codigo,
-      codigoUsado: false
-    });
+      await updateDoc(doc(db, "solicitudes", solicitud.id), {
+        estado: "aprobada",
+        codigoRegistro: codigo,
+        codigoUsado: false
+      });
 
-    await sendEmail({
-      to: solicitud.email,
-      subject: "¡Solicitud aprobada!",
-      text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${codigo}`
-    });
+      await sendEmail({
+        to: solicitud.email,
+        subject: "¡Solicitud aprobada!",
+        text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${codigo}`
+      });
 
-    // Recarga las solicitudes desde Firestore
-    const snapshot = await getDocs(collection(db, "solicitudes"));
-    setSolicitudes(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      // Recarga las solicitudes desde Firestore
+      const snapshot = await getDocs(collection(db, "solicitudes"));
+      setSolicitudes(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    } finally {
+      setProcesandoId(null);
+    }
   }
 
   function handleRechazarPopup(solicitud) {
@@ -78,15 +84,20 @@ export default function AdminSolicitudes() {
   }
 
   async function handleRechazoFinal() {
-    let motivo = motivoRechazo === "otro" ? motivoOtro : motivoRechazo;
-    await handleEstado(solicitudRechazo.id, "rechazada");
-    await sendEmail({
-      to: solicitudRechazo.email,
-      subject: "Solicitud rechazada",
-      text: `Lamentablemente tu solicitud fue rechazada. Motivo: ${motivo}`
-    });
-    setShowMotivo(false);
-    setSolicitudRechazo(null);
+    setProcesandoId(solicitudRechazo.id);
+    try {
+      let motivo = motivoRechazo === "otro" ? motivoOtro : motivoRechazo;
+      await handleEstado(solicitudRechazo.id, "rechazada");
+      await sendEmail({
+        to: solicitudRechazo.email,
+        subject: "Solicitud rechazada",
+        text: `Lamentablemente tu solicitud fue rechazada. Motivo: ${motivo}`
+      });
+      setShowMotivo(false);
+      setSolicitudRechazo(null);
+    } finally {
+      setProcesandoId(null);
+    }
   }
 
   // Filtro por estado y fechas
@@ -230,12 +241,22 @@ export default function AdminSolicitudes() {
                         title="Aprobar"
                         onClick={() => handleAprobar(s)}
                         className="text-green-400 hover:text-green-600 text-xl"
-                      >✔️</button>
+                        disabled={procesandoId === s.id}
+                      >
+                        {procesandoId === s.id ? (
+                          <span className="animate-spin inline-block w-5 h-5 border-2 border-green-400 border-t-transparent rounded-full"></span>
+                        ) : "✔️"}
+                      </button>
                       <button
                         title="Rechazar"
                         onClick={() => handleRechazarPopup(s)}
                         className="text-red-400 hover:text-red-600 text-xl"
-                      >❌</button>
+                        disabled={procesandoId === s.id}
+                      >
+                        {procesandoId === s.id ? (
+                          <span className="animate-spin inline-block w-5 h-5 border-2 border-red-400 border-t-transparent rounded-full"></span>
+                        ) : "❌"}
+                      </button>
                     </div>
                   )}
                 </td>

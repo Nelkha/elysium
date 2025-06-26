@@ -11,6 +11,8 @@ import AdminSolicitudes from './pages/AdminSolicitudes';
 
 import Wishlist from './components/Wishlist';
 import ModificarWish from './pages/ModificarWish';
+import SubirVideo from './pages/SubirVideo.jsx';
+import ModificarPerfil from './pages/ModificarPerfil.jsx';
 
 
 function App() {
@@ -75,6 +77,22 @@ function App() {
               element={
                 <PageWrapper>
                   <Wishlist />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/subir-video"
+              element={
+                <PageWrapper>
+                  <SubirVideo />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/modificar-perfil"
+              element={
+                <PageWrapper>
+                  <ModificarPerfil />
                 </PageWrapper>
               }
             />
