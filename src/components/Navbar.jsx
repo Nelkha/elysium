@@ -150,7 +150,7 @@ export default function Navbar() {
                     className="absolute left-0 top-full mt-2 bg-cardBg border border-white/10 rounded-lg shadow-lg z-50 min-w-[180px]"
                   >
                     <NavLink
-                      to="/ModificarWish"
+                      to="/modificarWish"
                       onClick={() => setShowUserMenu(false)}
                       className="block w-full text-left px-4 py-2 text-white hover:bg-white/10 rounded-t-lg"
                     >
