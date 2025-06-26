@@ -7,6 +7,7 @@ export default function Miembros() {
   const [miembros, setMiembros] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagina, setPagina] = useState(1);
+  const [overlayIndex, setOverlayIndex] = useState(null);
 
   // Hardcodea el líder
   const lider = {
@@ -132,9 +133,12 @@ export default function Miembros() {
               className="group relative"
               style={{ perspective: '1000px' }}
             >
-              <div className="relative transition-all duration-300 group-hover:scale-105 transform-gpu">
+              <div
+                className="relative transition-all duration-300 group-hover:scale-105 transform-gpu cursor-pointer"
+                onClick={() => setOverlayIndex(index)}
+              >
                 {/* Glowing border for hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-neon via-purple to-pink p-0.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-glow">
+                <div className="absolute inset-0 bg-gradient-to-r from-neon via-purple to-pink p-0.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-glow pointer-events-none">
                   <div className="w-full h-full bg-cardBg rounded-xl"></div>
                 </div>
                 <div className="relative bg-gradient-to-br from-cardBg to-gray-800 rounded-xl border border-white/10 group-hover:border-transparent transition-all duration-300 overflow-hidden">
@@ -203,6 +207,69 @@ export default function Miembros() {
           </div>
         )}
       </div>
+
+      {/* Overlay global para detalles */}
+      {overlayIndex !== null && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
+          onClick={() => setOverlayIndex(null)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, y: 40 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.9, y: 40 }}
+            transition={{ duration: 0.2 }}
+            className="bg-gradient-to-br from-cardBg to-gray-800 rounded-2xl border-2 border-neon p-8 max-w-md w-full mx-4 shadow-2xl flex flex-col items-start text-lg text-left"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="text-neon font-bold text-3xl mb-4 flex items-center gap-2">
+              <span>👤</span> {miembrosPagina[overlayIndex]?.nombre}
+            </div>
+            <div className="flex gap-2 mb-3">
+              <span title="Clase" className="text-xl">🧙‍♂️</span>
+              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.clase}</span>
+            </div>
+            <div className="flex gap-2 mb-3">
+              <span title="Rol" className="text-xl">🛡️</span>
+              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.rol}</span>
+            </div>
+            <div className="flex gap-2 mb-3">
+              <span title="Nivel" className="text-xl">⭐</span>
+              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.nivel}</span>
+            </div>
+            <div className="flex gap-2 mb-3">
+              <span title="GS" className="text-xl">⚔️</span>
+              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.gs}</span>
+            </div>
+            <div className="flex gap-2 mb-3">
+              <span title="Maestría 1" className="text-xl">🪄</span>
+              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.maestria1}</span>
+            </div>
+            <div className="flex gap-2 mb-3">
+              <span title="Maestría 2" className="text-xl">🏹</span>
+              <span className="text-white text-lg">{miembrosPagina[overlayIndex]?.maestria2}</span>
+            </div>
+            <div className="text-neon text-base mt-4 italic">
+              <span className="font-bold">Frase favorita: </span>
+              {miembrosPagina[overlayIndex]?.frasefavorita || "Sin frase favorita"}
+            </div>
+            <div className="text-neon text-base mt-2 italic">
+              <span className="font-bold">Mensaje personal: </span>
+              {miembrosPagina[overlayIndex]?.mensajepersonal || "Sin mensaje personal"}
+            </div>
+            <button
+              className="mt-6 px-4 py-2 bg-neon text-black rounded font-bold text-lg"
+              onClick={() => setOverlayIndex(null)}
+            >
+              Cerrar
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

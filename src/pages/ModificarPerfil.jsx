@@ -274,6 +274,101 @@ export default function ModificarPerfil() {
         {renderCampo("Maestría 1", "maestria1", "number")}
         {renderCampo("Maestría 2", "maestria2", "number")}
         {renderCampo("GS", "gs", "number")}
+
+        {/* Campo Frase Favorita */}
+        <div className="mb-4">
+          <label className="block text-white mb-2">Frase favorita:</label>
+          {editando === "frasefavorita" ? (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                className="p-2 rounded bg-gray-800 text-white flex-1"
+                value={valor}
+                onChange={e => setValor(e.target.value)}
+                maxLength={60}
+                disabled={guardando}
+                placeholder="Escribe tu frase favorita (máx 60 caracteres)"
+              />
+              <button
+                type="button"
+                className="bg-neon text-black px-3 py-1 rounded font-bold"
+                onClick={() => handleGuardar("frasefavorita")}
+                disabled={guardando}
+              >
+                {guardando ? "Guardando..." : "Guardar"}
+              </button>
+              <button
+                type="button"
+                className="bg-gray-700 text-white px-3 py-1 rounded font-bold"
+                onClick={handleCancelar}
+                disabled={guardando}
+              >
+                Cancelar
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-2 items-center">
+              <span className="flex-1 bg-gray-800 text-white rounded p-2 border border-white/10 min-h-[40px] truncate">
+                {perfil.frasefavorita || <span className="text-gray-400">Sin frase favorita</span>}
+              </span>
+              <button
+                type="button"
+                className="bg-neon text-black px-3 py-1 rounded font-bold"
+                onClick={() => handleEditar("frasefavorita")}
+              >
+                Editar
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Campo Mensaje Personal */}
+        <div className="mb-4">
+          <label className="block text-white mb-2">Mensaje personal:</label>
+          {editando === "mensajepersonal" ? (
+            <div className="flex gap-2">
+              <textarea
+                className="p-2 rounded bg-gray-800 text-white flex-1 resize-none"
+                value={valor}
+                onChange={e => setValor(e.target.value)}
+                maxLength={200}
+                rows={3}
+                disabled={guardando}
+                placeholder="Escribe tu mensaje personal (máx 200 caracteres)"
+              />
+              <button
+                type="button"
+                className="bg-neon text-black px-3 py-1 rounded font-bold"
+                onClick={() => handleGuardar("mensajepersonal")}
+                disabled={guardando}
+              >
+                {guardando ? "Guardando..." : "Guardar"}
+              </button>
+              <button
+                type="button"
+                className="bg-gray-700 text-white px-3 py-1 rounded font-bold"
+                onClick={handleCancelar}
+                disabled={guardando}
+              >
+                Cancelar
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-2 items-center">
+              <span className="flex-1 bg-gray-800 text-white rounded p-2 border border-white/10 min-h-[40px] break-words">
+                {perfil.mensajepersonal || <span className="text-gray-400">Sin mensaje personal</span>}
+              </span>
+              <button
+                type="button"
+                className="bg-neon text-black px-3 py-1 rounded font-bold"
+                onClick={() => handleEditar("mensajepersonal")}
+              >
+                Editar
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="mb-4">
           <label className="block text-white mb-2">Foto de Perfil:</label>
           <div className="flex flex-col items-center mb-6">
