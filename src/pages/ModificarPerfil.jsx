@@ -138,24 +138,16 @@ export default function ModificarPerfil() {
     setExito("");
     setSubiendoFoto(true);
     try {
-      // Convertir archivo a base64
-      const toBase64 = file =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result.split(',')[1]);
-          reader.onerror = error => reject(error);
-        });
-      const base64 = await toBase64(file);
+      // Usa FormData para enviar la imagen
+      const formData = new FormData();
+      formData.append("image", file);
 
-      // Subir a Imgur
       const res = await fetch("https://api.imgur.com/3/image", {
         method: "POST",
         headers: {
           Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
-          Accept: "application/json",
         },
-        body: JSON.stringify({ image: base64 }),
+        body: formData,
       });
       const data = await res.json();
       if (data.success && data.data.link) {
