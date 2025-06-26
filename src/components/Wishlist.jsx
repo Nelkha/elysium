@@ -9,6 +9,7 @@ const ARMAS = [
   "Deluzhnoa’s Permafrost Razors",
   "Deluzhnoa’s Arc of Frozen Death",
   "Deluzhnoa’s Ancient Petrified Staff",
+  "Deluzhnoa's Serrated Shard",
   "Tevent’s Fangs of Fury",
   "Tevent’s Warblade of Despair",
   "Tevent’s Arc of Wailing Death",
