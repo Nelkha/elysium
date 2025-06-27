@@ -180,13 +180,18 @@ export default function HistoriaSinFin() {
       });
       await updateDoc(historiaDocRef, { participantesTotales: increment(1) });
 
+      // Obtén tu número real de participante desde la base de datos
+      const yoDoc = await getDoc(doc(participantesRef, user.email));
+      const miNumero = yoDoc.data().numeroParticipante;
+
       // Si eres el único participante o el turno no está asignado, te toca empezar
       const docSnap2 = await getDoc(historiaDocRef);
       const data = docSnap2.data();
-      const soloUno = (await getDocs(participantesRef)).size === 1;
+      const snap2 = await getDocs(participantesRef);
+      const soloUno = snap2.size === 1;
       if (soloUno || !data.turnoActual) {
         await updateDoc(historiaDocRef, {
-          turnoActual: n,
+          turnoActual: miNumero,
           timestampUltimoTurno: serverTimestamp(),
         });
       }
