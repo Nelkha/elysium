@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { motion } from "framer-motion";
+import { useAuth } from "../hooks/useAuth"; // <-- Agrega esto
 
 // Lista de armas (puedes ajustar según tus armas)
 const ARMAS = [
@@ -24,9 +25,10 @@ const ARMAS = [
 ];
 
 export default function Wishlist() {
+  const { user, miembro, loading } = useAuth(); // <-- Agrega esto
   const [wishlist, setWishlist] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [armaFiltro, setArmaFiltro] = useState("");
+  const [loadingWishes, setLoadingWishes] = useState(true);
 
   useEffect(() => {
     async function fetchWishlist() {
@@ -36,10 +38,34 @@ export default function Wishlist() {
         ...doc.data()
       }));
       setWishlist(data);
-      setLoading(false);
+      setLoadingWishes(false);
     }
     fetchWishlist();
   }, []);
+
+  // Control de acceso solo para miembros
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-darkBg via-black to-cardBg">
+        <span className="text-white text-2xl font-poppins">Cargando...</span>
+      </div>
+    );
+  }
+
+  if (!miembro) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-darkBg via-black to-cardBg">
+        <div className="bg-cardBg/80 border border-yellow-500/40 rounded-3xl p-12 text-center shadow-lg">
+          <h2 className="text-3xl font-bold text-yellow-400 font-poppins mb-4 animate-pulse">
+            Acceso solo para miembros
+          </h2>
+          <p className="text-lg text-white font-poppins mb-4">
+            Debes ser miembro para ver este contenido.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Filtrar por arma si hay filtro
   const wishlistFiltrada = armaFiltro
@@ -69,7 +95,7 @@ export default function Wishlist() {
             ))}
           </select>
         </div>
-        {loading ? (
+        {loadingWishes ? (
           <div className="text-white text-center">Cargando...</div>
         ) : wishlistFiltrada.length === 0 ? (
           <div className="text-gray-400 text-center">No hay wishes registrados{armaFiltro && " para esa arma"}.</div>
