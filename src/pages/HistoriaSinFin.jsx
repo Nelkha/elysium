@@ -179,8 +179,12 @@ export default function HistoriaSinFin() {
         timestampInscripcion: serverTimestamp(),
       });
       await updateDoc(historiaDocRef, { participantesTotales: increment(1) });
-      // Si es el primer participante, le toca empezar
-      if (usados.length === 0) {
+
+      // Si eres el único participante o el turno no está asignado, te toca empezar
+      const docSnap2 = await getDoc(historiaDocRef);
+      const data = docSnap2.data();
+      const soloUno = (await getDocs(participantesRef)).size === 1;
+      if (soloUno || !data.turnoActual) {
         await updateDoc(historiaDocRef, {
           turnoActual: n,
           timestampUltimoTurno: serverTimestamp(),
