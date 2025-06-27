@@ -175,6 +175,13 @@ export default function Navbar() {
                     >
                       Modificar perfil
                     </NavLink>
+                    <NavLink
+                      to="/juegos"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-white hover:bg-white/10"
+                    >
+                      Juegos
+                    </NavLink>
                   </motion.div>
                 )}
               </AnimatePresence>

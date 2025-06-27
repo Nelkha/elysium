@@ -13,6 +13,8 @@ import Wishlist from './components/Wishlist';
 import ModificarWish from './pages/ModificarWish';
 import SubirVideo from './pages/SubirVideo.jsx';
 import ModificarPerfil from './pages/ModificarPerfil.jsx';
+import JuegosComunidad from './pages/JuegosComunidad';
+import HistoriaSinFin from './pages/HistoriaSinFin';
 
 
 function App() {
@@ -93,6 +95,22 @@ function App() {
               element={
                 <PageWrapper>
                   <ModificarPerfil />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/juegos"
+              element={
+                <PageWrapper>
+                  <JuegosComunidad />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/juegos/historia-sin-fin"
+              element={
+                <PageWrapper>
+                  <HistoriaSinFin />
                 </PageWrapper>
               }
             />
