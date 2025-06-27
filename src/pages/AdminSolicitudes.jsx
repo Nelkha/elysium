@@ -101,7 +101,18 @@ export default function AdminSolicitudes() {
     setProcesandoId(solicitudRechazo.id);
     try {
       let motivo = motivoRechazo === "otro" ? motivoOtro : motivoRechazo;
-      await handleEstado(solicitudRechazo.id, "rechazada");
+      await runTransaction(db, async (transaction) => {
+        const solicitudRef = doc(db, "solicitudes", solicitudRechazo.id);
+        const solicitudSnap = await transaction.get(solicitudRef);
+
+        // Verifica que siga pendiente
+        if (!solicitudSnap.exists() || solicitudSnap.data().estado !== "pendiente") {
+          throw new Error("La solicitud ya fue procesada por otro administrador.");
+        }
+
+        transaction.update(solicitudRef, { estado: "rechazada" });
+      });
+
       await sendEmail({
         to: solicitudRechazo.email,
         subject: "Solicitud rechazada",
@@ -109,6 +120,12 @@ export default function AdminSolicitudes() {
       });
       setShowMotivo(false);
       setSolicitudRechazo(null);
+
+      // Recarga las solicitudes desde Firestore
+      const snapshot = await getDocs(collection(db, "solicitudes"));
+      setSolicitudes(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    } catch (err) {
+      setError(err.message || "Error al rechazar la solicitud");
     } finally {
       setProcesandoId(null);
     }
