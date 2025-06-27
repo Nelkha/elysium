@@ -161,6 +161,17 @@ export default function HistoriaSinFin() {
       const usados = snap.docs.map(d => d.data().numeroParticipante);
       let n = 1;
       while (usados.includes(n)) n++;
+
+      // Asegúrate de que el documento principal existe
+      const docSnap = await getDoc(historiaDocRef);
+      if (!docSnap.exists()) {
+        await setDoc(historiaDocRef, {
+          participantesTotales: 0,
+          turnoActual: null,
+          timestampUltimoTurno: serverTimestamp(),
+        });
+      }
+
       await setDoc(doc(participantesRef, user.email), {
         email: user.email,
         nombre: miembro?.nombre || user.displayName || user.email,
