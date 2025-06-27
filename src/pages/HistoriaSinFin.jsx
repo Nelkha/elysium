@@ -174,7 +174,7 @@ export default function HistoriaSinFin() {
 
       await setDoc(doc(participantesRef, user.email), {
         email: user.email,
-        nombre: miembro?.nombre || user.displayName || user.email,
+        nombre: miembro?.nombre ?? user.displayName ?? user.email,
         numeroParticipante: n,
         timestampInscripcion: serverTimestamp(),
       });
@@ -250,7 +250,7 @@ export default function HistoriaSinFin() {
         {
           texto: texto.trim(),
           email: user.email,
-          nombre: miembro?.nombre || user.displayName || user.email,
+          nombre: miembro?.nombre ?? user.displayName ?? user.email,
           timestamp: serverTimestamp(),
         }
       );
