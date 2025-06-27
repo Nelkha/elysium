@@ -77,7 +77,7 @@ export default function AdminSolicitudes() {
       await sendEmail({
         to: solicitud.email,
         subject: "¡Solicitud aprobada!",
-        text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${generarCodigoUnico(solicitud)}`
+        text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${codigo}`
       });
 
       // Recarga las solicitudes desde Firestore
