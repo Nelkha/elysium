@@ -5,6 +5,7 @@ import { db } from "../firebase";
 
 export function useAuth() {
   const [user, setUser] = useState(null);
+  const [miembro, setMiembro] = useState(null); // <-- Nuevo estado
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,18 +18,21 @@ export function useAuth() {
         if (snapshot.empty) {
           await signOut(auth);
           setUser(null);
+          setMiembro(null);
         } else {
           setUser(firebaseUser);
+          setMiembro(snapshot.docs[0].data()); // <-- Guarda el objeto miembro
         }
       } else {
         setUser(null);
+        setMiembro(null);
       }
       setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  return { user, loading };
+  return { user, miembro, loading }; // <-- Devuelve miembro
 }
 
 export async function loginSoloMiembros() {
