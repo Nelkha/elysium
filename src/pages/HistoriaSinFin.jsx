@@ -83,8 +83,7 @@ export default function HistoriaSinFin() {
       turnoActual &&
       historiaDocRef
     ) {
-      // Busca el participante al que le toca
-      const participanteTurno = participantes.find(p => p.numeroParticipante === turnoActual);
+     
       // Busca el timestamp del último turno
       getDoc(historiaDocRef).then((docSnap) => {
         const data = docSnap.data();
@@ -278,6 +277,8 @@ export default function HistoriaSinFin() {
     }
     setEnviando(false);
   };
+
+  const participanteTurno = participantes.find(p => p.numeroParticipante === turnoActual);
 
   console.log({ user, miembro, esAdmin, loading, verificando });
 
