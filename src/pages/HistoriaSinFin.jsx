@@ -137,7 +137,7 @@ export default function HistoriaSinFin() {
     );
   }
 
-  if (!esMiembro && !esAdmin) {
+  if (!(esMiembro || miembro) && !esAdmin) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-darkBg via-black to-cardBg">
         <div className="bg-cardBg/80 border border-yellow-500/40 rounded-3xl p-12 text-center shadow-lg">
