@@ -93,8 +93,8 @@ export default function HistoriaSinFin() {
           : new Date(data.timestampUltimoTurno.seconds * 1000);
         const ahora = new Date();
         const diffHoras = (ahora - ultimoTurno) / (1000 * 60 * 60);
-        if (diffHoras >= 6) {
-          // Pasaron más de 6 horas, reasignar turno a otro participante al azar
+        if (diffHoras >= 1) {
+          // Pasaron más de 1 hora, reasignar turno a otro participante al azar
           const otros = participantes.filter(
             (p) => p.numeroParticipante !== turnoActual
           );
@@ -296,7 +296,7 @@ export default function HistoriaSinFin() {
           <li>Debes anotarte para participar y ver la historia.</li>
           <li>Puedes dejar de participar en cualquier momento (con confirmación).</li>
           <li>El participante 1 comienza la historia.</li>
-          <li>Si quien debe continuar no responde en 6 horas, se elige a otro al azar.</li>
+          <li>Si quien debe continuar no responde en 1 hora, se elige a otro al azar.</li>
           <li>Cuando sea tu turno, verás un aviso aquí.</li>
         </ul>
         <div className="flex flex-col items-center gap-4">
