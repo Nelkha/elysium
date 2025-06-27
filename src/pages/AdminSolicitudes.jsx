@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { collection, getDocs, updateDoc, doc, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc, addDoc, serverTimestamp, runTransaction } from "firebase/firestore";
 import { useAuth } from "../hooks/useAuth";
 import { useEsAdmin } from "../hooks/useEsAdmin";
 import { sendEmail } from "../utils/sendEmail"; // Debes crear esta función según tu proveedor de emails
@@ -47,30 +47,44 @@ export default function AdminSolicitudes() {
   async function handleAprobar(solicitud) {
     setProcesandoId(solicitud.id);
     try {
-      const codigo = generarCodigoUnico(solicitud);
+      await runTransaction(db, async (transaction) => {
+        const solicitudRef = doc(db, "solicitudes", solicitud.id);
+        const solicitudSnap = await transaction.get(solicitudRef);
 
-      await addDoc(collection(db, "codigos_registro"), {
-        email: solicitud.email,
-        codigo,
-        usado: false,
-        creado: serverTimestamp()
-      });
+        // Verifica que siga pendiente
+        if (!solicitudSnap.exists() || solicitudSnap.data().estado !== "pendiente") {
+          throw new Error("La solicitud ya fue procesada por otro administrador.");
+        }
 
-      await updateDoc(doc(db, "solicitudes", solicitud.id), {
-        estado: "aprobada",
-        codigoRegistro: codigo,
-        codigoUsado: false
+        const codigo = generarCodigoUnico(solicitud);
+
+        // Crea el código y actualiza la solicitud dentro de la transacción
+        const codigosRef = collection(db, "codigos_registro");
+        transaction.set(doc(codigosRef), {
+          email: solicitud.email,
+          codigo,
+          usado: false,
+          creado: serverTimestamp()
+        });
+
+        transaction.update(solicitudRef, {
+          estado: "aprobada",
+          codigoRegistro: codigo,
+          codigoUsado: false
+        });
       });
 
       await sendEmail({
         to: solicitud.email,
         subject: "¡Solicitud aprobada!",
-        text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${codigo}`
+        text: `¡Felicitaciones! Tu solicitud fue aprobada. Usa este código único para registrarte: ${generarCodigoUnico(solicitud)}`
       });
 
       // Recarga las solicitudes desde Firestore
       const snapshot = await getDocs(collection(db, "solicitudes"));
       setSolicitudes(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    } catch (err) {
+      setError(err.message || "Error al aprobar la solicitud");
     } finally {
       setProcesandoId(null);
     }
