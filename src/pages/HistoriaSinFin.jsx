@@ -267,9 +267,9 @@ export default function HistoriaSinFin() {
           timestampUltimoTurno: serverTimestamp(),
         });
       } else {
-        // Solo queda uno, se queda esperando
+        // Solo queda uno, nadie tiene el turno hasta que se sume otro
         await updateDoc(historiaDocRef, {
-          turnoActual: numeroParticipante,
+          turnoActual: null,
           timestampUltimoTurno: serverTimestamp(),
         });
       }
