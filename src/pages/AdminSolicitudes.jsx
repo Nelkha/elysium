@@ -46,19 +46,18 @@ export default function AdminSolicitudes() {
 
   async function handleAprobar(solicitud) {
     setProcesandoId(solicitud.id);
+    let codigo = ""; // Declarar fuera
     try {
       await runTransaction(db, async (transaction) => {
         const solicitudRef = doc(db, "solicitudes", solicitud.id);
         const solicitudSnap = await transaction.get(solicitudRef);
 
-        // Verifica que siga pendiente
         if (!solicitudSnap.exists() || solicitudSnap.data().estado !== "pendiente") {
           throw new Error("La solicitud ya fue procesada por otro administrador.");
         }
 
-        const codigo = generarCodigoUnico(solicitud);
+        codigo = generarCodigoUnico(solicitud); // Asignar dentro
 
-        // Crea el código y actualiza la solicitud dentro de la transacción
         const codigosRef = collection(db, "codigos_registro");
         transaction.set(doc(codigosRef), {
           email: solicitud.email,
@@ -74,6 +73,7 @@ export default function AdminSolicitudes() {
         });
       });
 
+      // Ahora sí, aquí tienes acceso al valor correcto de "codigo"
       await sendEmail({
         to: solicitud.email,
         subject: "¡Solicitud aprobada!",
